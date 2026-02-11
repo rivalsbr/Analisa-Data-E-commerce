@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import os
 
 sns.set(style='dark')
 
@@ -40,8 +41,16 @@ def create_rfm_df(df):
 
 # --- LOAD DATA ---
 
-main_df = pd.read_csv("product_sales.csv")
-reviews_df = pd.read_csv("delivery_reviews.csv")
+# Mendapatkan direktori tempat file dashboard.py berada
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Menggabungkan path folder dengan nama file
+product_sales_path = os.path.join(current_dir, "product_sales.csv")
+delivery_review_path = os.path.join(current_dir, "delivery_review.csv")
+
+# Load data
+main_df = pd.read_csv(product_sales_path)
+reviews_df = pd.read_csv(delivery_review_path)
 
 # Konversi datetime
 main_df["order_purchase_timestamp"] = pd.to_datetime(main_df["order_purchase_timestamp"])
@@ -138,3 +147,4 @@ with col3:
     st.pyplot(fig)
 
 st.caption('Copyright (c) Muhammad Rivaldi 2025')
+
