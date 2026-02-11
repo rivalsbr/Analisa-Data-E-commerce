@@ -43,7 +43,7 @@ def create_rfm_df(df):
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 product_sales_path = os.path.join(current_dir, "product_sales.csv")
-delivery_review_path = os.path.join(current_dir, "delivery_review.csv")
+delivery_review_path = os.path.join(current_dir, "delivery_reviews.csv")
 
 try:
     main_df = pd.read_csv(product_sales_path)
@@ -128,5 +128,6 @@ with col3:
     sns.barplot(y="monetary", x="customer_id", data=rfm_df.sort_values(by="monetary", ascending=False).head(5), color="#72BCD4", ax=ax)
     ax.set_xticks([])
     st.pyplot(fig)
+
 
 st.caption('Copyright (c) Muhammad Rivaldi 2025')
