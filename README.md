@@ -60,8 +60,6 @@ streamlit run e-commerce\_dashboard.py
 
 ```
 
-\## Deploy Streamlit
-
 
 
 
