@@ -42,14 +42,33 @@ def create_rfm_df(df):
 # --- LOAD DATA DENGAN OS PATH ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-product_sales_path = os.path.join(current_dir, "product_sales.csv")
-delivery_review_path = os.path.join(current_dir, "delivery_reviews.csv")
+# Fungsi untuk mencari file tanpa peduli huruf besar/kecil (Case Insensitive)
+def find_file(name, path):
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.lower() == name.lower():
+                return os.path.join(root, file)
+    return None
+
+# Cari file secara otomatis
+product_sales_path = find_file("product_sales.csv", current_dir)
+delivery_review_path = find_file("delivery_reviews.csv", current_dir)
+
+# Jika tidak ditemukan dengan nama 'delivery_reviews' (pakai s), coba tanpa 's'
+if not delivery_review_path:
+    delivery_review_path = find_file("delivery_review.csv", current_dir)
 
 try:
-    main_df = pd.read_csv(product_sales_path)
-    reviews_df = pd.read_csv(delivery_review_path)
-except FileNotFoundError as e:
-    st.error(f"Error: File tidak ditemukan. Pastikan file CSV ada di folder yang sama dengan dashboard.py. Detail: {e}")
+    if product_sales_path and delivery_review_path:
+        main_df = pd.read_csv(product_sales_path)
+        reviews_df = pd.read_csv(delivery_review_path)
+    else:
+        # Debugging: Tampilkan file apa saja yang ada di folder tersebut
+        st.error(f"File tidak ditemukan di: {current_dir}")
+        st.write("Daftar file yang terdeteksi:", os.listdir(current_dir))
+        st.stop()
+except Exception as e:
+    st.error(f"Gagal membaca CSV: {e}")
     st.stop()
 
 # Konversi datetime
@@ -131,3 +150,4 @@ with col3:
 
 
 st.caption('Copyright (c) Muhammad Rivaldi 2025')
+
